@@ -1,11 +1,11 @@
 # ospf overall lab
 
-<style>
+<!-- <style>
 table, tr, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
-</style>
+</style> -->
 
 <table>
     <tr>
