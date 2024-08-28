@@ -1,21 +1,6 @@
 # ospf overall lab
 
-<!-- <style>
-table, tr, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-</style> -->
-
-<table>
-    <tr>
-        <td>
-            <img src = "./images/img-1.png">
-        </td>
-    </tr>
-</table>
-
-<!-- ![](./images/img-1.png) -->
+![](./images/img-1.png)
 
 lab for
 - virtual link
