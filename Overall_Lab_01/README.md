@@ -35,13 +35,25 @@
 | ISP1 | 100 |
 | ISP2 | 100 |
 | ISP3 | 100 |
+---
+#### Lab for
+- Etherchannel
+- Vlan
+- Trunk
+- OSPF
+- Policy based routing
+- VRRP
+- NAT
+- Track
+- Route-Map
+- IP SLA
 
-##### Goal
+#### Goal
 - VLANs 10-40 will use ISP1, failing over to ISP2.
 - VLANs 50-80 will use ISP2, failing over to ISP1.
 - If both ISPs fail, all VLANs will use ISP3.
 
-##### Task
+#### Task
 1. [Create vlan in AS1, AS2, AS3, AS4, DS1, and DS2](#1-create-vlan-in-as1,-as2,-as3,-as4,-ds1,-and-ds2)
 2. [Configure L2 etherchannel between AS and DS as the diagram.](#2-configure-l2-etherchannel-between-as-and-ds-as-the-diagram)
 3. [Configure L3 etherchannel between DS and CS as the diagram.](#3-configure-l3-etherchannel-between-ds-and-cs-as-the-diagram)
