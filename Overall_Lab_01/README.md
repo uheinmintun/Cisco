@@ -56,7 +56,7 @@
 
 ---
 
-###### 1. Create vlan in AS1, AS2, AS3, AS4, DS1, and DS2
+##### 1. Create vlan in AS1, AS2, AS3, AS4, DS1, and DS2
 
 > _example: AS1 and DS1_
 ```
@@ -77,7 +77,7 @@ DS1#
     vlan 40
     exit
 ```
-###### 2. Configure L2 etherchannel between AS and DS as the diagram.
+##### 2. Configure L2 etherchannel between AS and DS as the diagram.
 - AS1 to DS1
 - AS2 to DS1
 - AS3 to DS2
@@ -119,7 +119,7 @@ no shut
 </tr>
 </table>
 
-###### 3. Configure L3 etherchannel between DS and CS as the diagram.
+##### 3. Configure L3 etherchannel between DS and CS as the diagram.
 - DS1 to CS
 - DS2 to CS
 
@@ -163,7 +163,7 @@ no shut
 </tr>
 </table>
 
-###### 4. Configure Vlan 100 on CS and IP assign on CR1 and CR2.
+##### 4. Configure Vlan 100 on CS and IP assign on CR1 and CR2.
 ```
 CS#
     vlan 100
@@ -201,7 +201,7 @@ CR2#
 
 
 
-###### 5. Configure vlan routing and OSPF for all internal subnets communications.
+##### 5. Configure vlan routing and OSPF for all internal subnets communications.
 - 5.1 Inter-vlan routing on DS1 and DS2.
 
     ```
@@ -282,7 +282,7 @@ CR2#
         network 40.0.0.0 0.0.0.255 area 0
     ```
 
-###### 6. Configure Track to check reachability to ISP1 and ISP2 in CR1.
+##### 6. Configure Track to check reachability to ISP1 and ISP2 in CR1.
 
 ```
 CR1#
@@ -308,7 +308,7 @@ CR1#
     delay down 2 up 2
 ```
 
-###### 7. Create default route on CR1 and CR2.
+##### 7. Create default route on CR1 and CR2.
 ```
 CR1#
     ip route 0.0.0.0 0.0.0.0 101.0.0.100 track 1
@@ -318,7 +318,7 @@ CR1#
 CR2#
     ip route 0.0.0.0 0.0.0.0 103.0.0.100
 ```
-###### 8. Configure NAT on CR1 and CR2.
+##### 8. Configure NAT on CR1 and CR2.
 
 ```
 CR1#
@@ -356,7 +356,7 @@ CR2#
     
     ip nat insid sour list LANS inter e0/0 overload
 ```
-###### 9. Configure NAT rule and PBR Vlan 10-40 to ISP1 and Vlan 50-80 to ISP2 in CR1.
+##### 9. Configure NAT rule and PBR Vlan 10-40 to ISP1 and Vlan 50-80 to ISP2 in CR1.
 
 ```
 CR1#
@@ -384,7 +384,7 @@ CR1#
         ip policy route-map PBR-MAP
 ```
 
-###### 10. Configure VRRP on CR1 and CR2.
+##### 10. Configure VRRP on CR1 and CR2.
 ```
 CR1#
     int e0/2
@@ -402,7 +402,7 @@ CR2#
     vrrp 40 ip 40.0.0.254
 ```
 
-###### 11. Configure default route and Add default route to OSPF in CS
+##### 11. Configure default route and Add default route to OSPF in CS
 
 ```
 CS#
