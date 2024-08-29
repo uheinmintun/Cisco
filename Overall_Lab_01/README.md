@@ -61,7 +61,7 @@
 5. [Configure vlan routing and OSPF for all internal subnets communications.](#5-configure-vlan-routing-and-ospf-for-all-internal-subnets-communications)
 6. [Configure Track to check reachability to ISP1 and ISP2 in CR1.](#6-configure-track-to-check-reachability-to-isp1-and-isp2-in-cr1)
 7. [Create default route on CR1 and CR2.](#7-create-default-route-on-cr1-and-cr2)
-8. [Configure NAT on CR1 and CR2.](#8-configure-nat-on-cr1-and-cr2)
+8. [Configure NAT on CR1 and CR2 for all vlans.](#8-configure-nat-on-cr1-and-cr2-for-all-vlans)
 9. [Configure NAT rule and PBR Vlan 10-40 to ISP1 and Vlan 50-80 to ISP2 in CR1.](#9-configure-nat-rule-and-pbr-vlan-10-40-to-isp1-and-vlan-50-80-to-isp2-in-cr1)
 10. [Configure VRRP on CR1 and CR2.](#10-configure-vrrp-on-cr1-and-cr2)
 11. [Configure default route and Add default route to OSPF in CS](#11-configure-default-route-and-add-default-route-to-ospf-in-cs)
@@ -330,7 +330,7 @@ CR1#
 CR2#
     ip route 0.0.0.0 0.0.0.0 103.0.0.100
 ```
-#### 8. Configure NAT on CR1 and CR2.
+#### 8. Configure NAT on CR1 and CR2 for all vlans.
 
 ```
 CR1#
