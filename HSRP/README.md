@@ -26,13 +26,10 @@
 - HSRP
 
 #### Task
-- [Overall Lab](#overall-lab)
-      - [Lab for](#lab-for)
-      - [Task](#task)
-      - [1. Basic Configuration](#1-basic-configuration)
-      - [2. Configure HSRP on both switches](#2-configure-hsrp-on-both-switches)
-      - [3. Verification](#3-verification)
 
+1. [Basic Configuration](#1-basic-configuration)
+2. [Configure HSRP on both switches](#2-configure-hsrp-on-both-switches)
+3. [Verification](#3-verification)
 ---
 
 #### 1. Basic Configuration
@@ -86,7 +83,7 @@ Switch2#
 ```
 #### 3. Verification
 <pre>
-Switch1# <span style="background-color:gray;">show standby </span>
+Switch1#show standby
 GigabitEthernet0/1 - Group 10
   State is Active
     8 state changes, last state change 00:11:49
@@ -97,7 +94,7 @@ GigabitEthernet0/1 - Group 10
     Next hello sent in 0.512 secs
   Authentication MD5, key-string
   Preemption enabled
-  <span style="background-color:gray;">Active router is local </span>
+  Active router is local
   Standby router is 192.168.1.2, priority 100 (expires in 11.360 sec)
   Priority 120 (configured 120)
   Group name is "Group10" (cfgd)
