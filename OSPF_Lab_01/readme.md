@@ -37,45 +37,52 @@
 - OSPF summarization
 
 #### Task
-1. [Assign IP address in all routers](#1-assign-ip-address-in-all-routers)
-2. [Configure OSPF in R1 to R9](#2-configure-ospf-in-r1-to-r9)
-3. [Create virtual links between R1 and R3](#3-create-virtual-links-between-r1-and-r3)
-4. [Configure RIPv2 in R11 and R9](#4-configure-ripv2-in-r11-and-r9)
-5. [Configure EIGRP in R8 and R10](#5-configure-eigrp-in-r8-and-r10)
-6. [Configure redistribute in R8 and R9](#6-configure-redistribute-in-r8-and-r9)
-7. [Configure area 30 as stub area](#7-configure-area-30-as-stub-area)
-8. [Configure area 20 as totally stub area](#8-configure-area-20-as-totally-stub-area)
-9. [Configure area 40 as nssa area](#9-configure-area-40-as-nssa-area)
-10. [Configure area 50 as totally nssa area](#10-configure-area-50-as-totally-nssa-area)
-11. [Configure OSPF summarization on R1, R3, R8](#11-configure-ospf-summarization-on-r1-r3-r8)
+- [OSPF Lab](#ospf-lab)
+  - [](#)
+  - [| R11        | 11 |](#-r11---------11-)
+      - [Lab for](#lab-for)
+      - [Task](#task)
+      - [1. Assign IP address in all routers](#1-assign-ip-address-in-all-routers)
+      - [2. Configure OSPF in R1 to R9](#2-configure-ospf-in-r1-to-r9)
+      - [3. Create virtual links between R1 and R3](#3-create-virtual-links-between-r1-and-r3)
+      - [4. Configure RIPv2 in R11 and R9](#4-configure-ripv2-in-r11-and-r9)
+      - [5. Configure EIGRP in R8 and R10](#5-configure-eigrp-in-r8-and-r10)
+      - [6. Configure redistribute in R8 and R9](#6-configure-redistribute-in-r8-and-r9)
+      - [7. Configure area 30 as stub area](#7-configure-area-30-as-stub-area)
+      - [8. Configure area 20 as totally stub area](#8-configure-area-20-as-totally-stub-area)
+      - [9. Configure area 40 as nssa area](#9-configure-area-40-as-nssa-area)
+      - [10. Configure area 50 as totally nssa area](#10-configure-area-50-as-totally-nssa-area)
+      - [11. configure ospf summarization on R1, R3, R8](#11-configure-ospf-summarization-on-r1-r3-r8)
 
 
 ---
 #### 1. Assign IP address in all routers
 >_example: R2_
 ```shell
-int e0/0
-ip add 12.0.0.2 255.255.255.0
-no shut
-int e0/1
-ip add 23.0.0.2 255.255.255.0
-no shut
-int lo0
-ip add 192.168.0.1 255.255.255.0
-int lo1
-ip add 192.168.1.1 255.255.255.0
-int lo2
-ip add 192.168.2.1 255.255.255.0
+R2#
+    int e0/0
+    ip add 12.0.0.2 255.255.255.0
+    no shut
+    int e0/1
+    ip add 23.0.0.2 255.255.255.0
+    no shut
+    int lo0
+    ip add 192.168.0.1 255.255.255.0
+    int lo1
+    ip add 192.168.1.1 255.255.255.0
+    int lo2
+    ip add 192.168.2.1 255.255.255.0
 ```
     
 #### 2. Configure OSPF in R1 to R9
 > _example: R2_
 ```
-router ospf 1
-router-id 0.0.0.2
-network 12.0.0.0 0.0.0.255 area 10
-network 23.0.0.0 0.0.0.255 area 10
-network 192.168.0.0 0.0.3.255 area 10
+R2#
+    router ospf 1
+    router-id 0.0.0.2
+    network 12.0.0.0 0.0.0.255 area 10
+    network 23.0.0.0 0.0.0.255 area 10
+    network 192.168.0.0 0.0.3.255 area 10
 ```
 - 2.1. Verify
 
