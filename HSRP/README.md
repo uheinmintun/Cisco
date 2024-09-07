@@ -82,7 +82,8 @@ Switch2#
       standby 10 authentication md5 key-string MyLab.90
 ```
 #### 3. Verification
-<pre>
+
+```shell
 Switch1#show standby
 GigabitEthernet0/1 - Group 10
   State is Active
@@ -98,12 +99,13 @@ GigabitEthernet0/1 - Group 10
   Standby router is 192.168.1.2, priority 100 (expires in 11.360 sec)
   Priority 120 (configured 120)
   Group name is "Group10" (cfgd)
-</pre>
+  ```
 
-<pre>
-Switch2#<span style="background-color:gray;">show standby </span>
+
+```shell
+Switch2#show standby
 GigabitEthernet0/1 - Group 10
-  State is <span style="background-color:gray;">Standby</span>
+  State is Standby
     21 state changes, last state change 00:03:10
   Virtual IP address is 192.168.1.254
   Active virtual MAC address is 0000.0c07.ac0a (MAC Not In Use)
@@ -116,7 +118,7 @@ GigabitEthernet0/1 - Group 10
   Standby router is local
   Priority 100 (default 100)
   Group name is "hsrp-Gi0/1-10" (default)
-</pre>
+```
 
 
 
