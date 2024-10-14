@@ -12,17 +12,17 @@
 #### Task
 1. [Initial Config ](#1-initial-config)
 2. [BGP Config](#2-bgp-config)
-	- 2.1 neighboring by connected IP. (R1, R2, R3, R5)
-	- 2.2 neighboring by loopback IP. (R2-R4) 
-	- 2.3 advertise loopback networks by redistribute in R4.
-	- 2.4 advertise loopback networks by network command in R5.
+    - 2.1 neighboring by connected IP. (R1, R2, R3, R5)
+    - 2.2 neighboring by loopback IP. (R2-R4) 
+    - 2.3 advertise loopback networks by redistribute in R4.
+    - 2.4 advertise loopback networks by network command in R5.
 3. Verification <br>
-	`# show ip bgp` <br>
-	`# show ip bgp summary` <br>
-	`# show ip bgp neighbors` <br>
-	`# show ip bgp neighbors 12.0.0.2` <br>
-	`# show tcp bri` <br>
-	`# show ip route bgp` <br>
+    `# show ip bgp` <br>
+    `# show ip bgp summary` <br>
+    `# show ip bgp neighbors` <br>
+    `# show ip bgp neighbors 12.0.0.2` <br>
+    `# show tcp bri` <br>
+    `# show ip route bgp` <br>
 4. Multihop and update source config (R2 and R4)
 5. Configure next-hop self (R2 and R3)
 6. Verification
