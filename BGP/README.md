@@ -270,7 +270,7 @@ R1#sh ip bgp
      ```python
      R1#sh ip bgp               
           Network          Next Hop            Metric LocPrf Weight Path
-     "*>i 23.0.0.0/24      12.0.0.2                 0    100      0 i"
+     #*>i 23.0.0.0/24      12.0.0.2                 0    100      0 i
       * i                  13.0.0.3                 0    100      0 i
      ```
 - Router-ID attribute
@@ -281,7 +281,7 @@ R1#sh ip bgp
      ----------------------------------------------
      R1#sh ip bgp               
           Network          Next Hop            Metric LocPrf Weight Path
-     "*>i 23.0.0.0/24      13.0.0.3                 0    100      0 i"
+     #*>i 23.0.0.0/24      13.0.0.3                 0    100      0 i
       * i                  12.0.0.2                 0    100      0 i
      ```
 - Metric attribute
@@ -299,7 +299,7 @@ R1#sh ip bgp
      R1#sh ip bgp          
           Network          Next Hop            Metric LocPrf Weight Path
       * i 23.0.0.0/24      13.0.0.3                10    100      0 i
-     "*>i                  12.0.0.2                 0    100      0 i"
+     #*>i                  12.0.0.2                 0    100      0 i
      ```
 - Origin Code attribute
      ```python
@@ -311,7 +311,7 @@ R1#sh ip bgp
      R1#sh ip bgp          
           Network          Next Hop            Metric LocPrf Weight Path
       * i 23.0.0.0/24      12.0.0.2                 0    100      0 ?
-     "*>i                  13.0.0.3                10    100      0 i"
+     #*>i                  13.0.0.3                10    100      0 i
      ```
 - Local Preference attribute
      ```python
@@ -327,7 +327,7 @@ R1#sh ip bgp
      ----------------------------------------------
      R1#sh ip bgp          
           Network          Next Hop            Metric LocPrf Weight Path
-     "*>i 23.0.0.0/24      12.0.0.2                 0    200      0 ?"
+     #*>i 23.0.0.0/24      12.0.0.2                 0    200      0 ?
       * i                  13.0.0.3                10    100      0 i
      ```
 - Weight attribute
@@ -343,7 +343,7 @@ R1#sh ip bgp
      ----------------------------------------------
      R1#sh ip bgp          
           Network          Next Hop            Metric LocPrf Weight Path
-     "*>i 23.0.0.0/24      13.0.0.3                 0    100    100 i"
+     #*>i 23.0.0.0/24      13.0.0.3                 0    100    100 i
       * i                  12.0.0.2                 0    200      0 ?
      ```
 
