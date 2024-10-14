@@ -1,5 +1,5 @@
 # BGP Lab
-![](./Images/topology.png "image")
+![](./images/topology.png "image")
 ---
 
 #### Lab for
@@ -10,12 +10,12 @@
 - Attributes Config & Path Selection
 
 #### Task
-1. Initial Config
-2. BGP Config <br>
-	2.1 neighboring by connected IP. (R1, R2, R3, R5) <br>
-	2.2 neighboring by loopback IP. (R2-R4)  <br>
-	2.3 advertise loopback networks by redistribute in R4. <br>
-	2.4 advertise loopback networks by network command in R5. <br>
+1. [Initial Config ](#1-initial-config)
+2. BGP Config
+	- 2.1 neighboring by connected IP. (R1, R2, R3, R5)
+	- 2.2 neighboring by loopback IP. (R2-R4) 
+	- 2.3 advertise loopback networks by redistribute in R4.
+	- 2.4 advertise loopback networks by network command in R5.
 3. Verification <br>
 	`# show ip bgp` <br>
 	`# show ip bgp summary` <br>
@@ -28,9 +28,63 @@
 6. Verification
 7. Attributes Config & Path Selection
 ---
-
-title: bgp lab note
-
+#### 1. Initial Config
+> R1, R2, R3, R4, R5
+```
+R4#
+     hostname R4
+     
+     int g0/0
+     ip add 192.168.1.4 255.255.255.0
+     no shut
+     int g0/1
+     ip add 24.0.0.4 255.255.255.0
+     no shut
+     int lo0
+     ip add 172.16.0.1 255.255.255.0
+     int lo1
+     ip add 172.16.1.1 255.255.255.0
+     int lo2
+     ip add 172.16.2.1 255.255.255.0
+     int lo3
+     ip add 172.16.3.1 255.255.255.0
+     int lo4
+     ip add 172.16.4.1 255.255.255.0
+     int lo5
+     ip add 172.16.5.1 255.255.255.0
+     int lo6
+     ip add 172.16.6.1 255.255.255.0
+     int lo7
+     ip add 172.16.7.1 255.255.255.0
+     int lo8
+     ip add 4.0.0.4 255.255.255.0
+```
+#### 2. BGP Config
+- 2.1 neighboring by connected IP. 
+     >(R1, R2, R3, R5)
+     ```
+     R3# 
+     router bgp 123
+     bgp router-id 3.0.0.3
+     network 3.0.0.3 mask 255.255.255.255
+     network 13.0.0.0 mask 255.255.255.0
+     network 23.0.0.0 mask 255.255.255.0
+     neighbor 35.0.0.5 remote-as 35
+     neighbor 13.0.0.1 remote-as 123
+     neighbor 23.0.0.2 remote-as 123
+     ```
+- 2.2 neighboring by loopback IP. 
+     > (R2-R4) 
+     ```py
+     "R4#"
+     router bgp 24
+     bgp router-id 4.0.0.4
+     network 4.0.0.4 mask 255.255.255.255
+     network 192.168.1.0 mask 255.255.255.0
+     neighbor 2.0.0.2 remote-as 123
+     ```
+- 2.3 advertise loopback networks by redistribute in R4.
+- 2.4 advertise loopback networks by network command in R5.
 ---
 
 ```py
