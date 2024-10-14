@@ -12,20 +12,20 @@
 #### Task
 1. [Initial Config ](#1-initial-config)
 2. [BGP Config](#2-bgp-config)
-	- 2.1 neighboring by connected IP. (R1, R2, R3, R5)
-	- 2.2 neighboring by loopback IP. (R2-R4) 
-	- 2.3 advertise loopback networks by redistribute in R4.
-	- 2.4 advertise loopback networks by network command in R5.
-3. Verification <br>
-	`# show ip bgp` <br>
-	`# show ip bgp summary` <br>
-	`# show ip bgp neighbors` <br>
-	`# show ip bgp neighbors 12.0.0.2` <br>
-	`# show tcp bri` <br>
-	`# show ip route bgp` <br>
-4. Multihop and update source config (R2 and R4)
-5. Configure next-hop self (R2 and R3)
-6. Verification
+    - 2.1 neighboring by connected IP. (R1, R2, R3, R5)
+    - 2.2 neighboring by loopback IP. (R2-R4) 
+    - 2.3 advertise loopback networks by redistribute in R4.
+    - 2.4 advertise loopback networks by network command in R5.
+3. [Verification](#3-verification) <br>
+    `# show ip bgp` <br>
+    `# show ip bgp summary` <br>
+    `# show ip bgp neighbors` <br>
+    `# show ip bgp neighbors 12.0.0.2` <br>
+    `# show tcp bri` <br>
+    `# show ip route bgp` <br>
+4. [Multihop and update source config](#4-multihop-and-update-source-config)
+5. [Configure next-hop self (R2 and R3)](#5-configure-next-hop-self)
+6. [Verification](#after-next-hop-self)
 7. Attributes Config & Path Selection
 ---
 #### 1. Initial Config
@@ -102,7 +102,7 @@ R4#
       network 172.30.6.0 mask 255.255.255.0
       network 172.30.7.0 mask 255.255.255.0
      ```
----
+#### 3. Verification
 
 ```py
 R1#sh ip bgp
@@ -162,6 +162,24 @@ B        2.0.0.2 [20/0] via 35.0.0.3, 00:01:05
       3.0.0.0/32 is subnetted, 1 subnets
 B        3.0.0.3 [20/0] via 35.0.0.3, 00:17:32
 ```
+#### 4. Multihop and update source config 
+> R2 and R4
+```py
+R2#
+router bgp 123
+ neighbor 4.0.0.4 ebgp-multihop 2
+ neighbor 4.0.0.4 update-source Loopback0
+ip route 4.0.0.4 255.255.255.255 24.0.0.4
+```
+```py
+R4#
+router bgp 24
+ neighbor 2.0.0.2 ebgp-multihop 2
+ neighbor 2.0.0.2 update-source Loopback8
+ip route 2.0.0.2 255.255.255.255 24.0.0.2
+```
+
+
 #### Before next-hop-self
 ```python
 R1#sh ip bgp
@@ -198,6 +216,20 @@ R1#sh ip bgp
  * i 192.168.1.0      4.0.0.4                  0    100      0 24 i
  * i 192.168.2.0      35.0.0.5                 0    100      0 35 i
 "
+```
+#### 5. Configure next-hop self
+> R2 and R3
+```py
+R2#
+router bgp 123
+ neighbor 12.0.0.1 next-hop-self
+ neighbor 23.0.0.3 next-hop-self
+```
+```py
+R3#
+router bgp 123
+ neighbor 13.0.0.1 next-hop-self
+ neighbor 23.0.0.2 next-hop-self
 ```
 #### After next-hop-self
 ```python
@@ -236,83 +268,86 @@ R1#sh ip bgp
 "
 ```
 #### Attribute (Path Selection)
-```python
-"default attribute"
-R1#sh ip bgp               
-     Network          Next Hop            Metric LocPrf Weight Path
-"*>i 23.0.0.0/24      12.0.0.2                 0    100      0 i"
- * i                  13.0.0.3                 0    100      0 i
-```
-```python
-"Router-ID attribute"
-R3#
-router bgp 123
- bgp router-id 2.0.0.1
-----------------------------------------------
-R1#sh ip bgp               
-     Network          Next Hop            Metric LocPrf Weight Path
-"*>i 23.0.0.0/24      13.0.0.3                 0    100      0 i"
- * i                  12.0.0.2                 0    100      0 i
-```
-```python
-"Metric attribute"
-R1#
-access-list 1 permit 23.0.0.0 0.0.0.255
-route-map metric 10
- match ip add 1
- set metric 10
-route-map metric 20
+- default attribute
+     ```python
+     R1#sh ip bgp               
+          Network          Next Hop            Metric LocPrf Weight Path
+     "*>i 23.0.0.0/24      12.0.0.2                 0    100      0 i"
+      * i                  13.0.0.3                 0    100      0 i
+     ```
+- Router-ID attribute
+     ```python
+     R3#
+     router bgp 123
+      bgp router-id 2.0.0.1
+     ----------------------------------------------
+     R1#sh ip bgp               
+          Network          Next Hop            Metric LocPrf Weight Path
+     "*>i 23.0.0.0/24      13.0.0.3                 0    100      0 i"
+      * i                  12.0.0.2                 0    100      0 i
+     ```
+- Metric attribute
+     ```python
+     R1#
+     access-list 1 permit 23.0.0.0 0.0.0.255
+     route-map metric 10
+      match ip add 1
+      set metric 10
+     route-map metric 20
+     
+     router bgp 123
+     neighbor 13.0.0.3 route-map metric in
+     ----------------------------------------------
+     R1#sh ip bgp          
+          Network          Next Hop            Metric LocPrf Weight Path
+      * i 23.0.0.0/24      13.0.0.3                10    100      0 i
+     "*>i                  12.0.0.2                 0    100      0 i"
+     ```
+- Origin Code attribute
+     ```python
+     R2#
+     router bgp 123
+      no network 23.0.0.0 mask 255.255.255.0
+      redistribute connected
+     ----------------------------------------------
+     R1#sh ip bgp          
+          Network          Next Hop            Metric LocPrf Weight Path
+      * i 23.0.0.0/24      12.0.0.2                 0    100      0 ?
+     "*>i                  13.0.0.3                10    100      0 i"
+     ```
+- Local Preference attribute
+     ```python
+     R1#
+     access-list 1 permit 23.0.0.0 0.0.0.255
+     route-map local-pref 10
+      match ip add 1
+      set local-preference 200
+     route-map local-pref 20
+     
+     router bgp 123
+      neighbor 12.0.0.2 route-map local-pref in
+     ----------------------------------------------
+     R1#sh ip bgp          
+          Network          Next Hop            Metric LocPrf Weight Path
+     "*>i 23.0.0.0/24      12.0.0.2                 0    200      0 ?"
+      * i                  13.0.0.3                10    100      0 i
+     ```
+- Weight attribute
+     ```python
+     R1#
+     route-map weight permit 10
+      match ip address 1
+      set weight 100
+     route-map weight permit 20
+     
+     router bgp 123
+      neighbor 12.0.0.2 route-map local-pref in
+     ----------------------------------------------
+     R1#sh ip bgp          
+          Network          Next Hop            Metric LocPrf Weight Path
+     "*>i 23.0.0.0/24      13.0.0.3                 0    100    100 i"
+      * i                  12.0.0.2                 0    200      0 ?
+     ```
 
-router bgp 123
-neighbor 13.0.0.3 route-map metric in
-----------------------------------------------
-R1#sh ip bgp          
-     Network          Next Hop            Metric LocPrf Weight Path
- * i 23.0.0.0/24      13.0.0.3                10    100      0 i
-"*>i                  12.0.0.2                 0    100      0 i"
-```
-```python
-"Origin Code attribute"
-R2#
-router bgp 123
- no network 23.0.0.0 mask 255.255.255.0
- redistribute connected
-----------------------------------------------
-R1#sh ip bgp          
-     Network          Next Hop            Metric LocPrf Weight Path
- * i 23.0.0.0/24      12.0.0.2                 0    100      0 ?
-"*>i                  13.0.0.3                10    100      0 i"
-```
-```python
-"Local Preference attribute"
-R1#
-access-list 1 permit 23.0.0.0 0.0.0.255
-route-map local-pref 10
- match ip add 1
- set local-preference 200
-route-map local-pref 20
 
-router bgp 123
- neighbor 12.0.0.2 route-map local-pref in
-----------------------------------------------
-R1#sh ip bgp          
-     Network          Next Hop            Metric LocPrf Weight Path
-"*>i 23.0.0.0/24      12.0.0.2                 0    200      0 ?"
- * i                  13.0.0.3                10    100      0 i
-```
-```python
-"Weight attribute"
-R1#
-route-map weight permit 10
- match ip address 1
- set weight 100
-route-map weight permit 20
 
-router bgp 123
- neighbor 12.0.0.2 route-map local-pref in
-----------------------------------------------
-R1#sh ip bgp          
-     Network          Next Hop            Metric LocPrf Weight Path
-"*>i 23.0.0.0/24      13.0.0.3                 0    100    100 i"
- * i                  12.0.0.2                 0    200      0 ?
-```
