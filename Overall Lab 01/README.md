@@ -103,7 +103,7 @@ DS1#
 </tr>
 <td>
 
-```
+```py
 int rang e0/0-1
 shut
 switchport trunk enc dot
@@ -116,7 +116,7 @@ no shut
 </td>
 <td>
 
-```
+```py
 int rang e0/2-3
 shut
 switchport trunk enc dot
