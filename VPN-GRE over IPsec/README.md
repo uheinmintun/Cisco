@@ -18,19 +18,89 @@
     `# show crypto ipsec sa`
 ---
 #### 1. Initial Config
-|R1|R2|
-|:---|:---|
-| `host R1`<br>`int e0/0`<br>`ip add 13.0.0.1 255.255.255.0`<br>`no shut`<br>`int e0/1`<br>`ip add 192.168.0.1 255.255.255.0`<br>`no shut`<br>`ip route 0.0.0.0 0.0.0.0 13.0.0.3`<br> | `host R2`<br>`int e0/1`<br>`ip add 23.0.0.2 255.255.255.0`<br>`no shut`<br>`int e0/0`<br>`ip add 172.16.0.2 255.255.255.0`<br>`no shut`<br>`ip route 0.0.0.0 0.0.0.0 23.0.0.3`<br> |
+
+```py
+R1#
+    host R1
+    
+    int e0/0
+    ip add 13.0.0.1 255.255.255.0
+    no shut
+    int e0/1
+    ip add 192.168.0.1 255.255.255.0
+    no shut
+    
+    ip route 0.0.0.0 0.0.0.0 13.0.0.3
+```
+```py
+R2#
+    host R2
+    
+    int e0/1
+    ip add 23.0.0.2 255.255.255.0
+    no shut
+    int e0/0
+    ip add 172.16.0.2 255.255.255.0
+    no shut
+    
+    ip route 0.0.0.0 0.0.0.0 23.0.0.3
+```
 
 #### 2. IPsec Phrase 1 Config
-| R1 | R2 |
-|:---|:---|
-| `crypto isakmp policy 10`<br> &nbsp;`encr aes 256`<br> &nbsp;`hash sha512`<br> &nbsp;`authentication pre-share`<br> &nbsp;`group 2`<br><br>`crypto isakmp key OneTwo34 address 23.0.0.2 `<br> | `crypto isakmp policy 10`<br> &nbsp;`encr aes 256`<br> &nbsp;`hash sha512`<br> &nbsp;`authentication pre-share`<br> &nbsp;`group 2`<br><br>`crypto isakmp key OneTwo34 address 13.0.0.1 `<br> |
+```py
+R1#
+    crypto isakmp policy 10
+     encr aes 256
+     hash sha512
+     authentication pre-share
+     group 2
+     
+    crypto isakmp key OneTwo34 address 23.0.0.2  
+```
+```py
+R2#
+    crypto isakmp policy 10
+     encr aes 256
+     hash sha512
+     authentication pre-share
+     group 2
+     
+    crypto isakmp key OneTwo34 address 13.0.0.1  
+```
 
 #### 3. IPsec Phrase 2 Config
-| R1 | R2 |
-|:---|:---|
-| `crypto ipsec transform-set MySet esp-aes 256 esp-sha512-hmac `<br> &nbsp;&nbsp;`mode transport`<br><br>`ip access-list extended MyACL`<br> &nbsp;&nbsp;`permit gre host 13.0.0.1 host 23.0.0.2`<br><br> `crypto map MyMap 10 ipsec-isakmp `<br> &nbsp;&nbsp;`set peer 23.0.0.2`<br> &nbsp;&nbsp;`set transform-set MySet `<br> &nbsp;&nbsp;`match address MyACL`<br><br> `int e0/0  `<br> &nbsp;&nbsp;`crypto map MyMap`<br> | `crypto ipsec transform-set MySet esp-aes 256 esp-sha512-hmac `<br> &nbsp;&nbsp;`mode transport`<br><br>`ip access-list extended MyACL`<br> &nbsp;&nbsp;`permit gre host 23.0.0.2 host 13.0.0.1`<br><br> `crypto map MyMap 10 ipsec-isakmp `<br> &nbsp;&nbsp;`set peer 13.0.0.1`<br> &nbsp;&nbsp;`set transform-set MySet `<br> &nbsp;&nbsp;`match address MyACL`<br><br> `int e0/0  `<br> &nbsp;&nbsp;`crypto map MyMap`<br> |
+```py
+R1#
+    crypto ipsec transform-set MySet ah-sha512-hmac 
+     mode transport
+    
+    ip access-list extended MyACL
+     permit gre host 13.0.0.1 host 23.0.0.2
+     
+    crypto map MyMap 10 ipsec-isakmp 
+     set peer 23.0.0.2
+     set transform-set MySet 
+     match address MyACL
+     
+    int e0/0  
+     crypto map MyMap
+```
+```py
+R2#
+    crypto ipsec transform-set MySet ah-sha512-hmac 
+     mode transport
+    
+    ip access-list extended MyACL
+     permit gre host 23.0.0.2 host 13.0.0.1
+     
+    crypto map MyMap 10 ipsec-isakmp 
+     set peer 13.0.0.1
+     set transform-set MySet 
+     match address MyACL
+     
+    int e0/1
+     crypto map MyMap
+```
 
 #### 4. GRE config
 ```py
@@ -40,6 +110,14 @@ R1#
      tunnel source 13.0.0.1
      tunnel destination 23.0.0.2
 ```
+```py
+R2#
+    interface Tunnel12
+     ip address 100.0.0.2 255.255.255.0
+     tunnel source 23.0.0.2
+     tunnel destination 13.0.0.1
+```
+
 #### 5. Configure Routing Protocol
 ```py
 R1#
@@ -47,15 +125,9 @@ R1#
      network 100.0.0.0 0.0.0.255 area 0
      network 192.168.0.0 0.0.0.255 area 0
 ```
-
-
-#### Testing
-|C1|C2|
-|---|---|
-|`host R1`<br>`int e0/0`<br>`ip add 13.0.0.1 255.255.255.0`<br>`no shut`<br>`int e0/1`<br>`ip add 192.168.0.1 255.255.255.0`<br>`no shut`<br>`ip route 0.0.0.0 0.0.0.0 13.0.0.3`<br>|`host R2`<br>`int e0/1`<br>`ip add 23.0.0.2 255.255.255.0`<br>`no shut`<br>`int e0/0`<br>`ip add 172.16.0.2 255.255.255.0`<br>`no shut`<br>`ip route 0.0.0.0 0.0.0.0 23.0.0.3`<br>|
-|R2|```R2#<br>router ospf 1<br>network 100.0.0.0 0.0.0.255 area 0<br>network 192.168.0.0 0.0.0.255 area 0```|
-|```|```|
-
-|R1|R2|
-|---|---|
-| `host R1`<br>`int e0/0`<br>`ip add 13.0.0.1 255.255.255.0`<br>`no shut`<br>`int e0/1`<br>`ip add 192.168.0.1 255.255.255.0`<br>`no shut`<br>`ip route 0.0.0.0 0.0.0.0 13.0.0.3`<br> | `host R2`<br>`int e0/1`<br>`ip add 23.0.0.2 255.255.255.0`<br>`no shut`<br>`int e0/0`<br>`ip add 172.16.0.2 255.255.255.0`<br>`no shut`<br>`ip route 0.0.0.0 0.0.0.0 23.0.0.3`<br> |
+```py
+R1#
+    router ospf 1
+     network 100.0.0.0 0.0.0.255 area 0
+     network 172.16.0.0 0.0.0.255 area 0
+```
