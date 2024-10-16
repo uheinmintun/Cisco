@@ -14,7 +14,7 @@
 ---
 
 #### 1. LACP L2 config (DS-1 and DS-2)
-```
+```py
 DS-1#
 	int range g0/0-3
 	shut
@@ -24,7 +24,7 @@ DS-1#
 	channel-group 20 mode active
 	no shut
 ```
-```
+```py
 DS-2#
 	int range g0/0-3
 	shut
@@ -35,7 +35,7 @@ DS-2#
 	no shut
 ```
 #### 2. LACP L3 config (DS-1 and AS-2)
-```
+```py
 DS-1#
 	int port-channel 2
 	no switchport
@@ -49,7 +49,7 @@ DS-1#
 	channel-group 2 mode active
 	no shut
 ```
-```
+```py
 AS-2#
 	int port-channel 2
 	no switchport
@@ -64,7 +64,7 @@ AS-2#
 	no shut
 ```
 #### LACP verification
-```
+```sh
   DS-1# sh etherchannel  summ
   
     Number of channel-groups in use: 2
@@ -72,14 +72,15 @@ AS-2#
     
     Group  Port-channel  Protocol    Ports
     ------+-------------+-----------+-----------------------------------------------
-    2      Po2(RU)         LACP      Gi1/2(P)    Gi1/3(P)    
+"   2      Po2(RU)         LACP      Gi1/2(P)    Gi1/3(P)    
     20     Po20(SU)        LACP      Gi0/0(P)    Gi0/1(P)    Gi0/2(P)    
                                      Gi0/3(P)  
+"									 
 ```
 
 
 #### 3. PAgP L2 config (DS-1 and AS-1)
-```
+```py
 DS-1# 
 	int range g1/0-1
 	shut
@@ -89,7 +90,7 @@ DS-1#
 	channel-group 10 mode desirable
 	no shut
 ```
-```
+```py
 AS-1# 
 	int range g0/0-1
 	shut
@@ -100,7 +101,7 @@ AS-1#
 	no shut
 ```
 #### 4. PAgP L3 config (DS-2 and AS-2)
-```
+```py
 AS-2# 
 	int port-channel 3
 	no switchport
@@ -114,7 +115,7 @@ AS-2#
 	channel-group 3 mode desirable
 	no shut
 ```
-```
+```py
 DS-2# 
 	int port-channel 3
 	no switchport
@@ -129,7 +130,7 @@ DS-2#
 	no shut
 ```
 #### PAgP Verification
-```
+```sh
   AS-2# sh etherch summ
   
     Number of channel-groups in use: 2
@@ -138,9 +139,9 @@ DS-2#
     Group  Port-channel  Protocol    Ports
     ------+-------------+-----------+-----------------------------------------------
     2      Po2(RU)         LACP      Gi0/2(P)    Gi0/3(P)    
-    3      Po3(RU)         PAgP      Gi0/0(P)    Gi0/1(P)  
+"   3      Po3(RU)         PAgP      Gi0/0(P)    Gi0/1(P)  
 ```
-``` 
+``` sh
   AS-1# sh etherchannel summary 
   
     Number of channel-groups in use: 1
@@ -148,10 +149,10 @@ DS-2#
     
     Group  Port-channel  Protocol    Ports
     ------+-------------+-----------+-----------------------------------------------
-    10     Po10(SU)        PAgP      Gi0/0(P)    Gi0/1(P) 
+"   10     Po10(SU)        PAgP      Gi0/0(P)    Gi0/1(P) 
 ```
 #### 5. Etherchannel manual L2 mode config (AS-1 and AS-2)
-```
+```py
 AS-1#
 	int rang g1/0-1
 	shut
@@ -160,7 +161,7 @@ AS-1#
 	channel-group 1 mode on
 	no shut
 ```
-```
+```py
 AS-2#
 	int range g1/0-1
 	shut
@@ -170,7 +171,7 @@ AS-2#
 	no shut
 ```
 #### 6. Etherchannel manual L3 mode config (DS-2 and AS-1)
-```
+```py
 AS-1#
 	int port-channel 30
 	no switchport
@@ -183,7 +184,7 @@ AS-1#
 	channel-group 30 mode on
 	no shut
 ```
-```
+```py
 DS-2#
 	int port-channel 30
 	no switchport
@@ -197,17 +198,17 @@ DS-2#
 	no shut
 ```
 #### Manual Mode verification
-```
+```sh
   AS-1# sh etherch summ
     Number of channel-groups in use: 2
     Number of aggregators:           2
     
     Group  Port-channel  Protocol    Ports
     ------+-------------+-----------+-----------------------------------------------
-    1      Po1(SU)          -        Gi1/0(P)    Gi1/1(P)    
-    10     Po10(SU)        PAgP      Gi0/0(P)    Gi0/1(P)  
+"   1      Po1(SU)          -        Gi1/0(P)    Gi1/1(P)					    
+"   10     Po10(SU)        PAgP      Gi0/0(P)    Gi0/1(P)  
 ```
-```    
+```sh    
   DS-2# sh etherchannel summary 
     Number of channel-groups in use: 3
     Number of aggregators:           3
@@ -217,18 +218,19 @@ DS-2#
     3      Po3(RU)         PAgP      Gi1/0(P)    Gi1/1(P)    
     20     Po20(SU)        LACP      Gi0/0(P)    Gi0/1(P)    Gi0/2(P)    
                                      Gi0/3(P)    
-    30     Po30(RU)         -        Gi1/2(P)    Gi1/3(P) 
+"   30     Po30(RU)         -        Gi1/2(P)    Gi1/3(P) 
+"
 ```
 
 #### Trunk Verification
-```
+```sh
 DS-1# sh int trunk
 
 Port        Mode             Encapsulation  Status        Native vlan
 Po10        on               802.1q         trunking      1
 Po20        on               802.1q         trunking      1
 ```
-```
+```sh
 DS-1# sh ip int bri   
                 
 Interface              IP-Address      OK? Method Status                Protocol   
