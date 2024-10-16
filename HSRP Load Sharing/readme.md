@@ -75,7 +75,8 @@ SW1# sh standby
   Standby router is 192.168.1.2, priority 100 (expires in 9.248 sec)
   "Priority 120 (configured 120)"
   Group name is "hsrp-Et0/1-10" (default)
-Ethernet0/1 - Group 20
+
+"Ethernet0/1 - Group 20"
   "State is Standby"
     1 state change, last state change 00:01:25
   "Virtual IP address is 192.168.1.253"
@@ -92,7 +93,7 @@ Ethernet0/1 - Group 20
 ```sh
 SW2# sh standby
 
-Ethernet0/1 - Group 10
+"Ethernet0/1 - Group 10"
   "State is Standby"
     3 state changes, last state change 00:01:51
   "Virtual IP address is 192.168.1.254"
@@ -105,7 +106,8 @@ Ethernet0/1 - Group 10
   Standby router is local
   "Priority 100 (default 100)"
   Group name is "hsrp-Et0/1-10" (default)
-Ethernet0/1 - Group 20
+
+"Ethernet0/1 - Group 20"
   "State is Active"
     2 state changes, last state change 00:02:26
   "Virtual IP address is 192.168.1.253"

@@ -28,7 +28,7 @@
 ---
 #### 1. Assign IP address in all routers
 >_example: R2_
-```shell
+```py
 R2#
     int e0/0
     ip add 12.0.0.2 255.255.255.0
@@ -46,7 +46,7 @@ R2#
     
 #### 2. Configure OSPF in R1 to R9
 > _example: R2_
-```
+```py
 R2#
     router ospf 1
     router-id 0.0.0.2
@@ -56,7 +56,7 @@ R2#
 ```
 - 2.1. Verify
 
-    ```
+    ```py
     R7#sh ip route ospf
     O IA     12.0.0.0 [110/20] via 17.0.0.1, 00:31:12, Ethernet0/1
     O IA     23.0.0.0 [110/30] via 17.0.0.1, 00:31:12, Ethernet0/1
@@ -66,21 +66,21 @@ R2#
     ```
 
 #### 3. Create virtual links between R1 and R3
-```
+```py
 R1#
     router ospf 1
     area 10 virtual-link 0.0.0.3
 ```
-```
+```py
 R3#
     router ospf 1
     area 10 virtual-link 0.0.0.1
 ```
 - 3.1. Verify
 
-    ```
+    ```sh
     R1#sh ip ospf virtual-links 
-    Virtual Link OSPF_VL0 to router 0.0.0.3 is up
+    "Virtual Link OSPF_VL0 to router 0.0.0.3 is up"
     Run as demand circuit
     DoNotAge LSA allowed.
     Transit area 10, via interface Ethernet0/0
@@ -97,7 +97,7 @@ R3#
     ```
 
 #### 4. Configure RIPv2 in R11 and R9
-```
+```py
 R9#
     router rip
     version 2
@@ -106,13 +106,13 @@ R9#
 ```
 
 #### 5. Configure EIGRP in R8 and R10
-```
+```py
 R8#
     router eigrp 108
     no auto-summary
     network 108.0.0.0 0.0.0.255
 ```
-```
+```py
 R10#
     router eigrp 108
     no auto
@@ -121,14 +121,14 @@ R10#
 ```
 
 #### 6. Configure redistribute in R8 and R9
-```
+```py
 R8#
     router eigrp 108
     redistribute ospf 1 metric 10000 10 255 10 1500
     router ospf 1
     redistribute eigrp 108 subnets metric-type 2
 ```
-```
+```py
 R9#
     router rip
     redistribute ospf 1 metric 10
@@ -136,60 +136,60 @@ R9#
     redistribute rip metric 10 subnets
 ```
 #### 7. Configure area 30 as stub area
-```
+```py
 R4#
     router ospf 1
     area 30 stub
 ```
-```
+```py
 R6#
     router ospf 1
     area 30 stub
 ```
 - 7.1. Verify (no type 5 LSA, no ASBR)
 
-    ```
+    ```sh
     R6#sh ip ospf | sec Area
         Area 30
             Number of interfaces in this area is 1
-            It is a stub area
+"           It is a stub area"
             Area has no authentication
             Area ranges are
     ```
 
 #### 8. Configure area 20 as totally stub area
-```
+```py
 R5#
     router ospf 1
     area 20 stub
 ```
-```
+```py
 R4#
     router ospf 1
     area 20 stub no-summary
 ```
 - 8.1 Verify (no type 5 LSA, no ASBR, no type 3 summary LSA)
 
-    ```
+    ```sh
     R4#sh ip ospf | sec Area
-        Area BACKBONE(0)
+"       Area BACKBONE(0)"
             Number of interfaces in this area is 1
         Area has no authentication
         Area ranges are
         Area 20
             Number of interfaces in this area is 1
-            It is a stub area, no summary LSA in this area
+"           It is a stub area, no summary LSA in this area"
             Generates stub default route with cost 1
         Area has no authentication
         Area ranges are
         Area 30
             Number of interfaces in this area is 1
-            It is a stub area
+"           It is a stub area"
             Generates stub default route with cost 1
         Area has no authentication
         Area ranges are
     ```
-    ```
+    ```sh
     R5#sh ip ospf data
 
                 OSPF Router with ID (0.0.0.5) (Process ID 1)
@@ -212,19 +212,19 @@ R4#
     ```
 
 #### 9. Configure area 40 as nssa area
-```
+```py
 R7#
     router ospf 1
     area 40 nssa
 ```
-```
+```py
 R9#
     router ospf 1
     area 40 nssa
 ```
 - 9.1 Verify (no type 5 LSA, ASBR allowed)
 
-    ```
+    ```sh
     R9#sh ip ospf data
             Summary Net Link States (Area 40)
 
@@ -240,25 +240,25 @@ R9#
     192.168.1.1     0.0.0.7         1235        0x80000003 0x000DA0
     192.168.2.1     0.0.0.7         1235        0x80000003 0x0002AA
 
-            Type-7 AS External Link States (Area 40)
+"           Type-7 AS External Link States (Area 40)"
 
     Link ID         ADV Router      Age         Seq#       Checksum Tag
     119.0.0.0       0.0.0.9         1220        0x80000001 0x008E39 0
     ```
 #### 10. Configure area 50 as totally nssa area
-```
+```py
 R8#
     router ospf 1
     area 50 nssa
 ```
-```
+```py
 R7#
     router ospf 1
     area 50 nssa no-summary
 ```
 - 10.1 Verify (no type 3 LSA, no type 5 LSA, ASBR allowed)
 
-    ```
+    ```sh
     R8#sh ip ospf data
             Summary Net Link States (Area 50)
 
@@ -275,24 +275,24 @@ R7#
     ```
 
 #### 11. configure ospf summarization on R1, R3, R8
-```
+```py
 R1#
     router ospf 1
     area 10 range 192.168.0.0 255.255.252.0
 ```
-```
+```py
 R3#
     router ospf 1
     area 10 range 192.168.0.0 255.255.252.0
 ```
-```
+```py
 R8#
     router ospf 1
     summary-address 172.16.0.0 255.255.252.0
 ```
 - 11.1 Verify
 
-    ```
+    ```sh
     R7#sh ip route | sec 192.168    
     O IA  192.168.0.0/22 [110/21] via 17.0.0.1, 00:01:14, Ethernet0/1
 
