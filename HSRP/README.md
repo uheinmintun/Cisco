@@ -34,7 +34,7 @@
 
 #### 1. Basic Configuration
 
-```
+```py
 Switch1# 
     host Switch1
 
@@ -49,7 +49,7 @@ Switch1#
     ip routing
 ```
 
-```
+```py
 Switch2# 
     host Switch2
 
@@ -65,7 +65,7 @@ Switch2#
 ```
 
 #### 2. Configure HSRP on both switches
-```
+```py
 Switch1# 
     int g0/1
       standby 10 ip 192.168.1.254
@@ -74,7 +74,7 @@ Switch1#
       standby 10 authentication md5 key-string MyLab.90
 ```
 
-```
+```py
 Switch2# 
     int g0/1
       standby 10 ip 192.168.1.254
@@ -85,38 +85,38 @@ Switch2#
 
 ```shell
 Switch1#show standby
-GigabitEthernet0/1 - Group 10
-  State is Active
+"GigabitEthernet0/1 - Group 10"
+  State is "Active"
     8 state changes, last state change 00:11:49
-  Virtual IP address is 192.168.1.254
+  "Virtual IP address is 192.168.1.254"
   Active virtual MAC address is 0000.0c07.ac0a (MAC In Use)
     Local virtual MAC address is 0000.0c07.ac0a (v1 default)
-  Hello time 3 sec, hold time 10 sec
+  "Hello time 3 sec, hold time 10 sec"
     Next hello sent in 0.512 secs
-  Authentication MD5, key-string
+  "Authentication MD5, key-string"
   Preemption enabled
   Active router is local
   Standby router is 192.168.1.2, priority 100 (expires in 11.360 sec)
-  Priority 120 (configured 120)
+  "Priority 120 (configured 120)"
   Group name is "Group10" (cfgd)
   ```
 
 
 ```shell
 Switch2#show standby
-GigabitEthernet0/1 - Group 10
-  State is Standby
+"GigabitEthernet0/1 - Group 10"
+  "State is Standby"
     21 state changes, last state change 00:03:10
-  Virtual IP address is 192.168.1.254
+  "Virtual IP address is 192.168.1.254"
   Active virtual MAC address is 0000.0c07.ac0a (MAC Not In Use)
     Local virtual MAC address is 0000.0c07.ac0a (v1 default)
-  Hello time 3 sec, hold time 10 sec
+  "Hello time 3 sec, hold time 10 sec"
     Next hello sent in 1.904 secs
-  Authentication MD5, key-string
+  "Authentication MD5, key-string"
   Preemption enabled
   Active router is 192.168.1.1, priority 120 (expires in 9.392 sec)
   Standby router is local
-  Priority 100 (default 100)
+  "Priority 100 (default 100)"
   Group name is "hsrp-Gi0/1-10" (default)
 ```
 
