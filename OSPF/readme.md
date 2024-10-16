@@ -170,7 +170,7 @@ R4#
 ```
 - 8.1 Verify (no type 5 LSA, no ASBR, no type 3 summary LSA)
 
-    ```sh
+    ```shell
     R4#sh ip ospf | sec Area
 "       Area BACKBONE(0)"
             Number of interfaces in this area is 1
