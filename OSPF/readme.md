@@ -152,7 +152,7 @@ R6#
     R6#sh ip ospf | sec Area
         Area 30
             Number of interfaces in this area is 1
-"           It is a stub area"
+    "       It is a stub area"
             Area has no authentication
             Area ranges are
     ```
@@ -172,19 +172,19 @@ R4#
 
     ```shell
     R4#sh ip ospf | sec Area
-"       Area BACKBONE(0)"
+    "   Area BACKBONE(0)"
             Number of interfaces in this area is 1
         Area has no authentication
         Area ranges are
         Area 20
             Number of interfaces in this area is 1
-"           It is a stub area, no summary LSA in this area"
+   "        It is a stub area, no summary LSA in this area"
             Generates stub default route with cost 1
         Area has no authentication
         Area ranges are
         Area 30
             Number of interfaces in this area is 1
-"           It is a stub area"
+    "       It is a stub area"
             Generates stub default route with cost 1
         Area has no authentication
         Area ranges are
@@ -240,7 +240,7 @@ R9#
     192.168.1.1     0.0.0.7         1235        0x80000003 0x000DA0
     192.168.2.1     0.0.0.7         1235        0x80000003 0x0002AA
 
-"           Type-7 AS External Link States (Area 40)"
+    "      Type-7 AS External Link States (Area 40)"
 
     Link ID         ADV Router      Age         Seq#       Checksum Tag
     119.0.0.0       0.0.0.9         1220        0x80000001 0x008E39 0
