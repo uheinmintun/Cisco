@@ -71,7 +71,7 @@ Switch1#
       standby 10 ip 192.168.1.254
       standby 10 preempt
       standby 10 priority 120
-      standby 10 authentication md5 key-string MyLab.90
+      standby 10 authentication md5 key-string OneTwo34
 ```
 
 ```py
@@ -79,7 +79,7 @@ Switch2#
     int g0/1
       standby 10 ip 192.168.1.254
       standby 10 preempt
-      standby 10 authentication md5 key-string MyLab.90
+      standby 10 authentication md5 key-string OneTwo34
 ```
 #### 3. Verification
 
