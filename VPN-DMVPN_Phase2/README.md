@@ -9,7 +9,7 @@
 1. [Initial Config](#1-initial-config)
 2. [Create Tunnel interface in Hub and Spoke Routers](#2-create-tunnel-interface-in-hub-and-spoke-routers)
 3. [Configure Routing Protocols (EIGRP)](#3-configure-routing-protocols-eigrp)
-4. [Commands](#4-commands) <br>
+4. [Commands](#4-verification) <br>
 	`# show dmvpn` <br>
 	`# show ip nhrp` <br>
 	`# clear ip nhrp` <br>
@@ -171,7 +171,7 @@ router eigrp 1
     </tr>
 </table>
 
-#### 4. Commands
+#### 4. Verification
 
 ```sh
 R1-Hub#sh dmvpn
