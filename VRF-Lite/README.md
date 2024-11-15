@@ -17,10 +17,6 @@ Tasks
 ---
 #### 1. Initial Config
 ```py
-R1#
-    host R1
-```
-```py
 R4#
     host R4
     
