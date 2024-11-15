@@ -9,7 +9,7 @@
 2. Configure VRRP
 ---
 #### 1. Basic Configuration
-```
+```py
 SW-1#
 	int e0/0
 	no switch
@@ -24,7 +24,7 @@ SW-1#
 	ip routing
 	ip route 0.0.0.0 0.0.0.0 100.0.0.2
 ```
-```
+```py
 SW-2#
 	int e0/0
 	no switch
@@ -40,7 +40,7 @@ SW-2#
 	ip route 0.0.0.0 0.0.0.0 200.0.0.2
 ```
 #### 2. Configure VRRP
-```
+```py
 SW-1# 
 	int e0/1
 	vrrp 10 ip 192.168.1.254
@@ -48,14 +48,14 @@ SW-1#
 	vrrp 10 priority 120
 	vrrp 10 authentication text MyLab.90
 ```
-```
+```py
 SW-2#
 	int e0/1
 	vrrp 10 ip 192.168.1.254
 	vrrp 10 authentication text MyLab.90
 ```
 #### 3. Verification
-```
+```py
 SW1# sh vrrp
 
 Ethernet0/1 - Group 10 
@@ -70,7 +70,7 @@ Ethernet0/1 - Group 10
   Master Advertisement interval is 1.000 sec
   Master Down interval is 3.531 sec
 ```
-```
+```py
 SW2# sh vrrp
 
 Ethernet0/1 - Group 10 
