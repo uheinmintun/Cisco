@@ -339,7 +339,7 @@ R3#
 ```
 - 12.1 Verify
 
-    ```shell
+    ```py
     R1#sh ip ospf virtual-links 
     Virtual Link OSPF_VL0 to router 0.0.0.3 is up
     Run as demand circuit
@@ -355,12 +355,12 @@ R3#
         First 0x0(0)/0x0(0) Next 0x0(0)/0x0(0)
         Last retransmission scan length is 0, maximum is 0
         Last retransmission scan time is 0 msec, maximum is 0 msec
-"   Cryptographic authentication enabled"
-"       Sending SA: Key 1, Algorithm HMAC-SHA-512 - key chain A10-KEYCHAIN"
+    Cryptographic authentication enabled
+        Sending SA: Key 1, Algorithm HMAC-SHA-512 - key chain A10-KEYCHAIN
     ```
 
 #### 13. MD5 Authentication on Area 0 (R3-R4)
-```sh
+```py
 R3#
  key chain A0-KEYCHAIN
   key 1
@@ -369,7 +369,7 @@ R3#
  int e0/0
   ip ospf authentication key-chain A0-KEYCHAIN
 ```
-```sh
+```py
 R4#
  key chain A0-KEYCHAIN
   key 1
@@ -380,7 +380,7 @@ R4#
 ```
 - 12.1 Verify
 
-    ```shell
+    ```py
     R4#sh ip ospf int e0/0 | sec Crypto
     Cryptographic authentication enabled
         Sending SA: Key 1, Algorithm MD5 - key chain A0-KEYCHAIN
