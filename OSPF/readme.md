@@ -10,6 +10,7 @@
 - Redistribute
 - Create special area
 - OSPF summarization
+- Authentication
 
 #### Task
 1. [Assign IP address in all routers](#1-assign-ip-address-in-all-routers)
@@ -23,7 +24,8 @@
 9. [Configure area 40 as nssa area](#9-configure-area-40-as-nssa-area)
 10. [Configure area 50 as totally nssa area](#10-configure-area-50-as-totally-nssa-area)
 11. [Configure ospf summarization on R1, R3, R8](#11-configure-ospf-summarization-on-r1-r3-r8)
-
+12. [Configure Area 10 Virtual link SHA Authenticaiton](#12-configure-area-10-virtual-link-sha-authenticaiton)
+13. [MD5 Authentication on Area 0 (R3-R4)](#13-md5-authentication-on-area-0-r3-r4)
 
 ---
 #### 1. Assign IP address in all routers
@@ -124,7 +126,7 @@ R10#
 ```py
 R8#
     router eigrp 108
-    redistribute ospf 1 metric 10000 10 255 10 1500
+    redistribute ospf 1 metric 10000 100 255 10 1500
     router ospf 1
     redistribute eigrp 108 subnets metric-type 2
 ```
@@ -215,7 +217,7 @@ R4#
 ```py
 R7#
     router ospf 1
-    area 40 nssa
+    area 40 nssa default-information-originate
 ```
 ```py
 R9#
@@ -225,25 +227,41 @@ R9#
 - 9.1 Verify (no type 5 LSA, ASBR allowed)
 
     ```sh
-    R9#sh ip ospf data
+    R9#sh ip ospf database
+
+                OSPF Router with ID (0.0.0.9) (Process ID 1)
+
+            Router Link States (Area 40)
+
+    Link ID         ADV Router      Age         Seq#       Checksum Link count
+    0.0.0.7         0.0.0.7         190         0x80000003 0x001949 1
+    0.0.0.9         0.0.0.9         150         0x80000003 0x00124B 1
+
+            Net Link States (Area 40)
+
+    Link ID         ADV Router      Age         Seq#       Checksum
+    79.0.0.9        0.0.0.9         150         0x80000002 0x006859
+
             Summary Net Link States (Area 40)
 
     Link ID         ADV Router      Age         Seq#       Checksum
-    12.0.0.0        0.0.0.7         1235        0x80000003 0x002DE0
-    17.0.0.0        0.0.0.7         1235        0x80000003 0x00878B
-    23.0.0.0        0.0.0.7         1235        0x80000003 0x0002F6
-    34.0.0.0        0.0.0.7         1235        0x80000003 0x00D60D
-    45.0.0.0        0.0.0.7         1235        0x80000002 0x00AD22
-    46.0.0.0        0.0.0.7         1235        0x80000003 0x009E2F
-    78.0.0.0        0.0.0.7         1235        0x80000003 0x006B6A
-    192.168.0.1     0.0.0.7         1235        0x80000003 0x001896
-    192.168.1.1     0.0.0.7         1235        0x80000003 0x000DA0
-    192.168.2.1     0.0.0.7         1235        0x80000003 0x0002AA
+    12.0.0.0        0.0.0.7         1778        0x80000001 0x0031DE
+    17.0.0.0        0.0.0.7         190         0x80000002 0x00898A
+    23.0.0.0        0.0.0.7         1778        0x80000001 0x0006F4
+    34.0.0.0        0.0.0.7         1261        0x80000001 0x00DA0B
+    45.0.0.0        0.0.0.7         1261        0x80000001 0x00AF21
+    46.0.0.0        0.0.0.7         1261        0x80000001 0x00A22D
+    78.0.0.0        0.0.0.7         190         0x80000002 0x006D69
+    192.168.0.1     0.0.0.7         355         0x80000001 0x001C94
+    192.168.1.1     0.0.0.7         355         0x80000001 0x00119E
+    192.168.2.1     0.0.0.7         355         0x80000001 0x0006A8
 
-    "      Type-7 AS External Link States (Area 40)"
+            Type-7 AS External Link States (Area 40)
 
     Link ID         ADV Router      Age         Seq#       Checksum Tag
-    119.0.0.0       0.0.0.9         1220        0x80000001 0x008E39 0
+    0.0.0.0         0.0.0.7         190         0x80000002 0x00E0C8 0
+    119.0.0.0       0.0.0.9         150         0x80000002 0x00F0CB 0
+
     ```
 #### 10. Configure area 50 as totally nssa area
 ```py
@@ -300,4 +318,70 @@ R8#
         172.16.0.0/22 is subnetted, 1 subnets
     O N2     172.16.0.0 [110/20] via 78.0.0.8, 00:00:38, Ethernet0/2
     ```
+#### 12. Configure Area 10 Virtual link SHA Authenticaiton
+```sh
+R1#
+ key chain A10-KEYCHAIN
+  key 1
+   key-string A10-KEY
+   cryptographic-algorithm hmac-sha-512
+ router ospf 1
+  area 10 virtual-link 0.0.0.3 authentication key-chain A10-KEYCHAIN
+```
+```sh
+R3#
+ key chain A10-KEYCHAIN
+  key 1
+   key-string A10-KEY
+   cryptographic-algorithm hmac-sha-512
+ router ospf 1
+  area 10 virtual-link 0.0.0.1 authentication key-chain A10-KEYCHAIN
+```
+- 12.1 Verify
 
+    ```shell
+    R1#sh ip ospf virtual-links 
+    Virtual Link OSPF_VL0 to router 0.0.0.3 is up
+    Run as demand circuit
+    DoNotAge LSA allowed.
+    Transit area 10, via interface Ethernet0/0
+    Topology-MTID    Cost    Disabled     Shutdown      Topology Name
+            0           20        no          no            Base
+    Transmit Delay is 1 sec, State POINT_TO_POINT,
+    Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+        Hello due in 00:00:06
+        Adjacency State FULL (Hello suppressed)
+        Index 2/3, retransmission queue length 0, number of retransmission 0
+        First 0x0(0)/0x0(0) Next 0x0(0)/0x0(0)
+        Last retransmission scan length is 0, maximum is 0
+        Last retransmission scan time is 0 msec, maximum is 0 msec
+"   Cryptographic authentication enabled"
+"       Sending SA: Key 1, Algorithm HMAC-SHA-512 - key chain A10-KEYCHAIN"
+    ```
+
+#### 13. MD5 Authentication on Area 0 (R3-R4)
+```sh
+R3#
+ key chain A0-KEYCHAIN
+  key 1
+   key-string A0-KEY
+   cryptographic-algorithm md5
+ int e0/0
+  ip ospf authentication key-chain A0-KEYCHAIN
+```
+```sh
+R4#
+ key chain A0-KEYCHAIN
+  key 1
+   key-string A0-KEY
+   cryptographic-algorithm md5
+ int e0/0
+  ip ospf authentication key-chain A0-KEYCHAIN
+```
+- 12.1 Verify
+
+    ```shell
+    R4#sh ip ospf int e0/0 | sec Crypto
+    Cryptographic authentication enabled
+        Sending SA: Key 1, Algorithm MD5 - key chain A0-KEYCHAIN
+    ```
